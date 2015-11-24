@@ -1,9 +1,9 @@
 from django import forms
 
-from .models import List_items1
+from products.models import Product
 
 class PostForm(forms.ModelForm):
 
     class Meta:
-        model = List_items1
+        model = Product
         fields = ('title', 'quentity', 'zipcode', 'discription', 'address')

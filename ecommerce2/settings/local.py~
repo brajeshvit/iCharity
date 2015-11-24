@@ -45,6 +45,7 @@ https://accounts.google.com/displayunlockcaptcha
 # Application definition
 
 INSTALLED_APPS = (
+    'django_messages',
     'jet',
     #django app
     'django.contrib.admin',
@@ -60,7 +61,8 @@ INSTALLED_APPS = (
     #my apps
     'newsletter',
     'products',
-    'item',
+    #'item',
+    'items',
 )
 
 MIDDLEWARE_CLASSES = (

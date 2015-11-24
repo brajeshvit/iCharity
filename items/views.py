@@ -1,17 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from .models import List_items1
+from products.models import Product
 from .forms import PostForm
 from django import forms
 from django.shortcuts import redirect
 def post_list(request):
-    posts = List_items1.objects.filter(created_date__lte=timezone.now()).order_by('created_date')
+    posts = Product.objects.filter(created_date__lte=timezone.now()).order_by('created_date')
     return render(request, 'items/post_list.html', {'posts': posts})
 
 def post_detail(request, pk):
 	#event = Event.objects.get(pk=pk)
     
-    post = get_object_or_404(List_items1, pk=pk)
+    post = get_object_or_404(Product, pk=pk)
     #post = List_items.objects.get(pk=pk)
     return render(request, 'items/post_detail.html', {'post': post})
   

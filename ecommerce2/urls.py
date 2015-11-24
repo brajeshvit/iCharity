@@ -17,7 +17,6 @@ urlpatterns = [
     url(r'^products/', include('products.urls')), 
     # Django JET URLS
     url(r'^jet/', include('jet.urls', 'jet')), 
-    url(r'^item/', include('item.urls')),
     url(r'^items/', include('items.urls')),
 ]
 

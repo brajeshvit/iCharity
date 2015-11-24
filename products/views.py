@@ -1,4 +1,3 @@
-
 from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
@@ -6,9 +5,10 @@ from django.template import Context
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.utils import timezone
-# Custom Imports
 from .forms import VariationInventoryForm
 from .models import Product, Variation
+#rom items.models import List_items1
+
 # Create your views here.
 #################################################################################
 #Product list view
@@ -81,7 +81,7 @@ class ProductDetailView(DetailView):
     # template_name = "product.html"
 
     def product_detail_view_func(request, id):
-        # product_instance = Product.objects.get(id=id)
+        #product_instance = Product.objects.get(id=id)
         product_instance =  get_object_or_404(Product, id=id)
         try:
             product_instance = Product.object.get(id=id)

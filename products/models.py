@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.utils.text import slugify
 from django.utils import timezone
 
-
 # Create your models here.
 
 class ProductManager (models.Manager):
@@ -15,23 +14,25 @@ class ProductManager (models.Manager):
         return self.get_queryset().active()
 
 
-class Product(models.Model):
-    title  = models.CharField(max_length=120)
-    description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=10)
-    active = models.BooleanField(default=True)
-    objects = ProductManager()
-    quantity = models.IntegerField(default=0)
-    zip_Code = models.CharField(blank = True, max_length=6)
-    address = models.CharField(default=False, max_length=60)
-    date_created = models.DateTimeField(default=timezone.now)
-    date_Update = models.DateTimeField(blank=True, null=True)
-    expire_date = models.DateTimeField(blank=True, null=True)
 
+class Product(models.Model):
+    title = models.CharField(max_length=60)
+    quentity = models.IntegerField()
+    zipcode = models.CharField(max_length=6)
+    discription = models.CharField(max_length=200)
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    updated_date = models.DateTimeField(
+            blank=True, null=True)
+    expiry_date = models.DateTimeField(
+            blank=True, null=True)
+    address = models.CharField(max_length=200)            
+        
     def __unicode__(self):
         return (self.title)
+        
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs = {"pk": self.pk})
+        return reverse("product_detail", kwargs = {"pk": self.pk})    
 
 
 
@@ -64,7 +65,6 @@ def product_post_reciever(sender, instance, created, *args, **kwargs):
         new_var = Variation()
         new_var.product = product
         new_var.title = "default"
-        new_var.price = product.price
         new_var.save()
     print sender
 

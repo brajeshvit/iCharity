@@ -1,112 +1,72 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load staticfiles %}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>echarity</title>
-<link href="{% static 'css/bootstrap.css' %}" rel="stylesheet" type="text/css" />
-<link href="{% static 'css/bootstrap.min.css'  %}" type="text/css" />
-<link href="{% static 'css/bootstrap-theme.css' %}" type="text/css" />
-<link href="{% static 'css/bootstrap-theme.min.css' %}" type="text/css" />
-<!----------------ONLINE------->
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
-<script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
-<script src="{% static 'js/facebook.js' %}"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>	
-<script src="https://connect.facebook.net/en_US/all.js"></script>
 
-  
+{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+
 <style>
-.navbar-default{
-background: white;
+{% block style %}
+.navbar-static-top {
+	margin-bottom: 0px !important;
 }
-.modal-footer{
-background:#00CC99;
+
+.jumbotron {
+	background-color:#0E3D14;
+	color: #FFF;
 }
-        
-#myBODY {
-   background :url({% static "img/slider-intro-image2.jpg" %}) no-repeat center top;
-    background-size:100%;
-   min-height: 730px; 
-    weight:120px;
-    padding-top: auto;
-    background-repeat: no-repeat;}
-    
-    .mtb
-    {
-        padding-top: 15%;
-        padding-left: 20%;
-       
-}
+
+{% endblock %}
 </style>
-</head>
-<body style="background:grey">
-<div class="navbar-default navbar-fixed-top" role="navigation">
-<div class="container">
-<div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-<span class="sr-only">Toggle navigation</span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-<span class="icon-bar"></span>
-</button>
-<h1><b>WELCOME</b></h1>
-</div>
-<div class="navbar-collapse collapse">
-<ul class="nav navbar-nav navbar-right">
-<!-- Trigger the modal with a button --> 
- {% if request.user.is_authenticated %}
-<a href="{% url 'auth_logout' %}" type="button" class="btn btn-info btn-lg">Logout</a></button>
-{% else %}
-<button type="button"  class="btn btn-info btn-lg" data-toggle="modal" id='rim' data-target="#login">LOGIN HERE</button>
+
+
+     
+{% block jumbotron %}
+ {% if not request.user.is_authenticated %}
+
+<div class="jumbotron">
+ <div class="container">
+	<div class="row">
+		<div class='col-sm-6'>
+		<h1>Try Django 1.8</h1>
+		<p>The MVP Landing project is designed to get your project started. The goal is to help you launch as soon as possible with the least amount of investment using time or money. Join Us today.</p>
+		<p>
+		<a class="btn btn-lg btn-primary" href="" role="button">Join Us &raquo;</a>
+		</p>
+		</div>
+		<div class='col-sm-6' >
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/2uLYO1LUf6Q" frameborder="0" allowfullscreen></iframe>
+
+ 		</div>
+		</div>
+	</div>
+ </div>
  {% endif %}
- <li role="presentation" ><a href="{% url 'about' %}"><b>ABOUT</b></a></li>
-  <li role="presentation"><a href="#"><b>Profile</b></a></li>
-  <li role="presentation"><a href="{% url 'contact' %}"><b>Contact</b></a></li>
-</ul>
-</div>
-</div>
-    </div>
-    <div id="myBODY">
-           
-            <div class="mtb">
-                 <h1>E-CHARITY FOR HUMANITY</h1>
-<form class="navbar-form navbar-left" method="GET" role="search" action='{% url "products" %}'>
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Serche and Explore your vlues and things" name='q'>
-              </div>
- <button type="submit" class="btn btn-default" onclick="myfunction()">Submit</button>
-                </form>
-            
-</div></div>
-        
-    
+{% endblock %}
 
 
-<div class="container">
-  <!-- Modal -->
-  <div class="modal fade" id="login" role="dialog">
-    <div class="modal-dialog">
-    
-       <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">SIGN UP</h4>
-        </div>
-        <div class="modal-body">
-        <form>
-        <div class="row">
-  <div class="col-md-6">
-<a href="#"><img src='{% static "img/fb.png" %}' id="loginBtn" onclick="logIn();" value="Login" /></a><br/>
-<a href="http://www.twitter.com"><img src='{% static "img/tw.png" %}'/></a><br/>
-<a href="http://www.gmail.com"><img src='{% static "img/gplus.png" %}' /></a></div>
-  <div class="col-md-6">
-          {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path %}
+
+
+{% block content %}
+ {% if request.user.is_authenticated %}
+<h1>You are logged in!</h1>
+
+	{% if queryset %}
+	<h2>Welcome Staff</h2>
+	<table class='table'>
+	{% for instance in queryset %}
+		<tr><td>{{ forloop.counter }}</td><td>{{ instance.email }}</td><td>{{ instance.full_name }}</td><td>{{ instance.timestamp|timesince }} ago</td></tr>
+		{% if instance.email == "abc@gmail.edu" %}
+		<tr><td>is equal</td></tr>
+		{% endif %}
+	{% endfor %}
+	</table>
+
+	{% endif %}
+
+ {% else %}
+<div>
+ {% if not request.user.is_authenticated and not "/accounts/login" in request.get_full_path %}
             <form class='navbar-form navbar-right' method='POST' action='{% url "auth_login" %}'>{% csrf_token %}
               <div class='form-group'>
                  <input type='text' class='form-control' name='username' placeholder='Username'  /> 
@@ -117,138 +77,53 @@ background:#00CC99;
 <label for="remember">Remember me on this computer</label>              
               <button type='submit' class='btn btn-default'>Login</button></div>
           </form>
-          {% endif %}     
-       <a href="{% url 'registration_register' %}" class="btn btn-info btn-l square-btn-adjust">RAGISTRATION FOR THE NEW USER </a>
-					</div>
-</div>
-					
-                    
-		</form>
-                </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-    </div>
-    <!----------------------------------------------------------CONTAINE FOR EVENT------------------------------>
-    <lable><h2>Latest Donater</h2></lable>
-    <div class = "row">
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src ="image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-       <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
+          {% endif %}  </div>   
+<div class="row">
 
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src = "image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-          <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src ="image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src = "image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-</div>
-    
-    <lable><h2>Latest Requester</h2></lable>
-     <div class = "row">
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src ="image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src = "image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src ="image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-   <div class = "col-sm-6 col-md-3">
-      <a href = "#" class = "thumbnail">
-         <img src = "image/b2.jpeg" alt = "Generic placeholder thumbnail">
-      </a>
-        <button type = "button" class = "btn btn-info">Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <label><input type="radio" name="optradio">Favourite</label>
-   </div>
-   
-</div>
-    
-       
-    <!----------------------------FACEBOOK---------------------->
+  <div class="col-sm-3 pull-right">
+  	
+			<p class='lead text-align-center'>{{ title }}</p>
 
-    
-    
- <!--<script>
-        $(document).ready(function(){
-       $('#1').width(200);
-       $('#1').mouseover(function()
-       {
-          $(this).css("cursor","pointer");
-          $(this).animate({width: "500px"}, 'fast');
-       });
-    
-    $('#imgSmile').mouseout(function()
-      {   
-          $(this).animate({width: "200px"}, 'fast');
-       });
-   });
-    </script>-->
-    
-    
-    
-    
-    
-<!--<script>
+			<form method='POST' action=''>{% csrf_token %}
+			{{ form|crispy }}
 
-    $('#zoom_02').elevateZoom({
-    zoomType: "inner",
-cursor: "crosshair",
-zoomWindowFadeIn: 600,
-zoomWindowFadeOut: 850,
-   }); 
-     $('#zoom_03').elevateZoom({
-    zoomType: "inner",
-cursor: "crosshair",
-zoomWindowFadeIn: 600,
-zoomWindowFadeOut: 850,
-   }); 
-</script>-->
-</body>
-    </html>
+			<input class='btn btn-primary' type='submit' value='Sign Up' />
+
+			</form>
+	</div>
+
+	<div class='col-sm-3'>
+<p class='lead text-align-center'>Django &amp; Bootstrap</p>
+			<img src='{% static "img/marketing1.jpg" %}' class='img-responsive' />
+</div>
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Created for Starters 
+<br/>
+<span class='fa-stack fa-lg fa-5x'>
+<i class='fa fa-comment-o fa-stack-2x'></i>
+<i style='color:yellow;' class="fa fa-bolt fa-stack-1x"></i>
+
+</span>
+</p>
+
+</div>
+
+<div class='col-sm-3'>
+<p class='lead text-align-center'>Always Open Source <br/><br/>
+
+<span class="fa-stack fa-lg fa-5x">
+<i class="fa fa-circle-o-notch fa-stack-2x"></i>
+  <!-- <i class="fa fa-square-o fa-stack-2x"></i> -->
+  <i class="fa fa-github fa-stack-1x"></i>
+</span>
+</p>
+
+
+</div>
+
+
+</div>
+{% endif %}
+
+{% endblock %}
